@@ -1,0 +1,34 @@
+\section{Summary of Work}
+
+This project presented AgriMitra --- a comprehensive, AI-powered crop yield prediction and advisory system designed specifically for the Indian smallholder farming context. The system addressed two systemic challenges: the Precision Void, arising from the absence of localised, real-time agricultural data, and the Minimum Support Price Paradox, which results in suboptimal market timing for farmers.
+
+The implemented system integrates three principal components:
+\begin{itemize}
+    \item A multi-modal AI model combining Swin3D Transformers for processing ISRO satellite time-series data with Graph Neural Networks for encoding spatial farm dependencies via IoT sensor readings and Bhuvan NDVI data.
+    \item An INT8 ONNX quantisation pipeline that compresses the model by $3.93\times$ and achieves 310\,ms on-device inference latency, enabling deployment on mid-range Android smartphones.
+    \item A .NET MAUI cross-platform mobile application that delivers personalised yield advisories, input use recommendations, and MSP market insights, with SMS and IVR fallback channels for feature-phone users.
+\end{itemize}
+
+\section{Key Contributions}
+
+The principal contributions of this project are:
+\begin{enumerate}
+    \item \textbf{First application of Swin3D Transformers to Indian crop yield prediction}, establishing a new performance baseline of $R^2 = 0.883$ and MAPE $= 6.9\%$ across four major Maharashtra crops.
+    \item \textbf{A novel multi-modal fusion architecture} demonstrating that spatiotemporal satellite features and spatial GNN features are complementary, with fusion improving MAPE by 15.2\% over the best single-modal approach.
+    \item \textbf{An end-to-end edge deployment pipeline} validating that complex vision-transformer models can be quantised and deployed on low-cost Android hardware without prohibitive accuracy loss.
+    \item \textbf{A farmer-accessible advisory platform} that bridges the digital divide through native mobile and SMS/IVR delivery channels.
+\end{enumerate}
+
+\section{Future Work}
+
+The following directions are identified for future development:
+
+\begin{itemize}
+    \item \textbf{SAR data integration:} Incorporating ISRO RISAT-1A Synthetic Aperture Radar imagery would provide cloud-penetrating coverage during monsoon seasons, reducing the impact of cloud-cover gaps in the current optical data pipeline.
+    \item \textbf{Federated learning:} Extending the training framework with federated learning \cite{kumar2023federated} would allow the model to improve from distributed farmer data without centralising sensitive agricultural records, addressing the data privacy gap identified in the literature.
+    \item \textbf{Multi-state expansion:} The current evaluation covers Maharashtra; retraining and validation across diverse agro-climatic zones (Punjab, Andhra Pradesh, Karnataka) would test the generalisability of the architecture.
+    \item \textbf{Crop stress early warning:} Augmenting the prediction head with a classification branch for early drought, pest, and flooding stress detection would provide actionable warnings several days before visible crop damage.
+    \item \textbf{Smaller backbone exploration:} Evaluating MobileNet-based 3D backbones as alternatives to Swin3D-Tiny could further reduce the 28.6\,MB deployed model size, making the system viable on entry-level Android devices.
+\end{itemize}
+
+In summary, AgriMitra shows that combining deep learning, satellite remote sensing, and on-device inference is a practical and achievable approach to precision agriculture --- one that does not require expensive infrastructure or continuous connectivity, and that can realistically reach the smallholder farmers who need it most.

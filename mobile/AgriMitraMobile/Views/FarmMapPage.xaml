@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+    xmlns:vm="clr-namespace:AgriMitraMobile.ViewModels"
+    x:Class="AgriMitraMobile.Views.FarmMapPage"
+    x:DataType="vm:FarmMapViewModel"
+    Title="{Binding Title}"
+    BackgroundColor="{StaticResource PageBackground}">
+
+    <Grid RowDefinitions="*,Auto">
+
+        <!-- Full-screen map -->
+        <maps:Map x:Name="FarmMap"
+                  Grid.Row="0"
+                  MapType="Satellite"
+                  MapClicked="OnMapClicked"
+                  IsShowingUser="True" />
+
+        <!-- Vertex count badge overlaid on map -->
+        <Border Grid.Row="0"
+                HorizontalOptions="End" VerticalOptions="Start"
+                Margin="12" Padding="10,6"
+                BackgroundColor="{StaticResource PrimaryGreen}"
+                StrokeShape="RoundRectangle 20"
+                Stroke="Transparent">
+            <Label Text="{Binding PolygonStatus}"
+                   TextColor="White" FontSize="12" />
+        </Border>
+
+        <!-- Undo button on map -->
+        <Button Grid.Row="0"
+                Text="↩ Undo"
+                Command="{Binding UndoLastVertexCommand}"
+                IsVisible="{Binding CanUndo}"
+                HorizontalOptions="Start" VerticalOptions="Start"
+                Margin="12" Padding="12,6"
+                BackgroundColor="White"
+                TextColor="{StaticResource PrimaryGreen}"
+                CornerRadius="20"
+                FontSize="13" />
+
+        <!-- Bottom sheet -->
+        <Border Grid.Row="1"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 20,20,0,0"
+                Stroke="Transparent"
+                Padding="20,16,20,32">
+            <VerticalStackLayout Spacing="12">
+                <Label Text="{Binding AreaText}"
+                       FontSize="16" FontAttributes="Bold"
+                       TextColor="{StaticResource TextPrimary}"
+                       HorizontalOptions="Center" />
+
+                <Border StrokeShape="RoundRectangle 8"
+                        Stroke="{StaticResource Divider}"
+                        BackgroundColor="White">
+                    <Entry Placeholder="Field label (optional)"
+                           Text="{Binding FieldLabel}"
+                           Margin="12,0"
+                           HeightRequest="44" />
+                </Border>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Grid.Column="0"
+                            Text="Clear All"
+                            Command="{Binding ClearCommand}"
+                            Style="{StaticResource SecondaryButton}" />
+                    <Button Grid.Column="1"
+                            Text="Confirm Field →"
+                            Command="{Binding ConfirmCommand}"
+                            Style="{StaticResource PrimaryButton}"
+                            IsEnabled="{Binding CanConfirm}" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+    </Grid>
+</ContentPage>

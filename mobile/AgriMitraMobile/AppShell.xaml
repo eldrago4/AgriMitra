@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:AgriMitraMobile.Views"
+       x:Class="AgriMitraMobile.AppShell"
+       Shell.TabBarBackgroundColor="White"
+       Shell.TabBarForegroundColor="#2D7D32"
+       Shell.TabBarUnselectedColor="#9E9E9E"
+       Shell.TabBarTitleColor="#2D7D32">
+
+    <!-- Named routes for navigation -->
+    <Shell.Resources>
+        <Style TargetType="TabBar">
+            <Setter Property="Shell.TabBarBackgroundColor" Value="White" />
+        </Style>
+    </Shell.Resources>
+
+    <!-- Registration flow (not in tab bar) -->
+    <ShellContent Route="registration"
+                  ContentTemplate="{DataTemplate views:RegistrationPage}"
+                  Shell.TabBarIsVisible="False" />
+
+    <TabBar>
+        <ShellContent Title="Home"
+                      Route="home"
+                      Icon="icon_home.svg"
+                      ContentTemplate="{DataTemplate views:HomePage}" />
+
+        <ShellContent Title="Predictions"
+                      Route="myfields"
+                      Icon="icon_predictions.svg"
+                      ContentTemplate="{DataTemplate views:MyFieldsPage}" />
+
+        <ShellContent Title="Market"
+                      Route="market"
+                      Icon="icon_market.svg"
+                      ContentTemplate="{DataTemplate views:MarketPage}" />
+
+        <ShellContent Title="Profile"
+                      Route="settings"
+                      Icon="icon_profile.svg"
+                      ContentTemplate="{DataTemplate views:SettingsPage}" />
+    </TabBar>
+
+</Shell>

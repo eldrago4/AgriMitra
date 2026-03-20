@@ -1,0 +1,13 @@
+\newpage
+\addcontentsline{toc}{chapter}{Abstract}
+\begin{center}
+\emph{\Large \textbf{Abstract}}
+\end{center}
+
+The agricultural domain in India faces a major challenge characterised by significant financial losses, estimated at Rs.\,1.5 lakh crore annually, attributed primarily to climate volatility and informational asymmetry. This phenomenon is rooted in two critical issues: the Precision Void, wherein a majority of smallholder farmers operate without localised, real-time data, and the Minimum Support Price (MSP) paradox, resulting in suboptimal market timing.
+
+This project presents a comprehensive AI-powered system delivering high-accuracy, village-level crop yield forecasts and actionable advisories. Our methodology centres on multi-modal data fusion. We employed Swin3D Transformers \cite{liu2022swin3d} to process high-resolution ISRO satellite time-series data, treating crop growth as a spatiotemporal volume. Simultaneously, Graph Neural Networks (GNNs) using GATv2 convolutions \cite{brody2022gatv2} were employed to model the complex topological and environmental dependencies between neighbouring farm fields using IoT sensor \cite{jain2022iot} and Bhuvan NDVI API data. The fusion of these models enables high-fidelity prediction. The model was compressed via INT8 ONNX quantisation --- achieving a $3.93\times$ size reduction --- and deployed on-device to deliver personalised advisories and MSP market insights via a .NET MAUI mobile application and SMS/IVR protocols, making the system usable for farmers without smartphones or reliable internet access.
+
+The implemented system achieved a \textbf{15.2\% improvement in MAPE} over the best single-modal baseline, with an overall $R^2 = 0.883$ across four crop varieties in Maharashtra (2022--2024), validating a demonstrable reduction in resource wastage through precision advisory delivery.
+
+\textbf{Keywords:} Crop Yield Prediction, Swin3D Transformer, Graph Neural Network, Multi-Modal Fusion, Edge AI, ONNX, .NET MAUI, Precision Agriculture, ISRO Satellite Data.

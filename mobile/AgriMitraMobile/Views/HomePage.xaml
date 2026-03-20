@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:AgriMitraMobile.ViewModels"
+    x:Class="AgriMitraMobile.Views.HomePage"
+    x:DataType="vm:HomeViewModel"
+    BackgroundColor="{StaticResource PageBackground}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,16" Spacing="0">
+
+            <!-- Top bar -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+                <VerticalStackLayout Grid.Column="0">
+                    <Label Text="{Binding Greeting}"
+                           FontSize="22" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}" />
+                    <Label Text="Your AI farming assistant"
+                           Style="{StaticResource BodyText}" />
+                </VerticalStackLayout>
+                <Image Grid.Column="1" Source="agrimitra_logo.svg"
+                       HeightRequest="44" WidthRequest="44"
+                       VerticalOptions="Center" />
+            </Grid>
+
+            <!-- Hero card: last prediction -->
+            <Border Style="{StaticResource Card}"
+                    BackgroundColor="{StaticResource PrimaryGreen}"
+                    Margin="0,0,0,16">
+                <Grid RowDefinitions="Auto,Auto,Auto"
+                      ColumnDefinitions="*,Auto">
+                    <Label Grid.Row="0" Grid.Column="0"
+                           Text="Last Prediction"
+                           TextColor="#CCFFFFFF" FontSize="13" />
+                    <Label Grid.Row="0" Grid.Column="1"
+                           Text="{Binding LastPredDate}"
+                           TextColor="#AAFFFFFF" FontSize="12" />
+
+                    <Label Grid.Row="1" Grid.ColumnSpan="2"
+                           Text="{Binding LastCropName}"
+                           TextColor="White" FontSize="20" FontAttributes="Bold"
+                           Margin="0,4,0,0"
+                           IsVisible="{Binding HasLastPred}" />
+                    <Label Grid.Row="1" Grid.ColumnSpan="2"
+                           Text="No predictions yet — draw your field to start"
+                           TextColor="#CCFFFFFF" FontSize="14"
+                           IsVisible="{Binding HasLastPred, Converter={StaticResource InvertBool}}" />
+
+                    <Label Grid.Row="2" Grid.ColumnSpan="2"
+                           Text="{Binding LastYield}"
+                           TextColor="{StaticResource AccentGold}"
+                           FontSize="28" FontAttributes="Bold"
+                           IsVisible="{Binding HasLastPred}" />
+                </Grid>
+            </Border>
+
+            <!-- Quick-action 2×2 grid -->
+            <Label Text="Quick Actions" Style="{StaticResource SectionHeader}" />
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto"
+                  ColumnSpacing="12" RowSpacing="12" Margin="0,0,0,16">
+
+                <!-- New Prediction -->
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource Card}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NewPredictionCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Label Text="&#xE8F4;" FontFamily="MaterialIcons"
+                               FontSize="32" TextColor="{StaticResource PrimaryGreen}"
+                               HorizontalOptions="Center" />
+                        <Label Text="New Prediction" FontSize="13" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}"
+                               HorizontalOptions="Center" />
+                        <Label Text="Draw field + get yield" Style="{StaticResource CaptionText}"
+                               HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- My Fields -->
+                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource Card}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding MyFieldsCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Label Text="&#xE55B;" FontFamily="MaterialIcons"
+                               FontSize="32" TextColor="{StaticResource PrimaryGreen}"
+                               HorizontalOptions="Center" />
+                        <Label Text="My Fields" FontSize="13" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}"
+                               HorizontalOptions="Center" />
+                        <Label Text="View saved fields" Style="{StaticResource CaptionText}"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Market -->
+                <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource Card}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding MarketCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Label Text="&#xE5D1;" FontFamily="MaterialIcons"
+                               FontSize="32" TextColor="{StaticResource PrimaryGreen}"
+                               HorizontalOptions="Center" />
+                        <Label Text="Market Prices" FontSize="13" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}"
+                               HorizontalOptions="Center" />
+                        <Label Text="MSP + nearest mandi" Style="{StaticResource CaptionText}"
+                               HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- View Last Prediction -->
+                <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource Card}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ViewLastPredictionCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Label Text="&#xE8F9;" FontFamily="MaterialIcons"
+                               FontSize="32" TextColor="{StaticResource PrimaryGreen}"
+                               HorizontalOptions="Center" />
+                        <Label Text="View Results" FontSize="13" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}"
+                               HorizontalOptions="Center" />
+                        <Label Text="Last prediction detail" Style="{StaticResource CaptionText}"
+                               HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Tip banner -->
+            <Border StrokeShape="RoundRectangle 10" Stroke="Transparent"
+                    BackgroundColor="#E8F5E9" Padding="14" Margin="0,0,0,8">
+                <HorizontalStackLayout Spacing="10">
+                    <Label Text="&#xE8FC;" FontFamily="MaterialIcons"
+                           FontSize="22" TextColor="{StaticResource PrimaryGreen}"
+                           VerticalOptions="Center" />
+                    <Label Text="Tip: Use IoT sensor data for 15% more accurate yield predictions."
+                           Style="{StaticResource BodyText}" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- AgriMitra Brand Colors -->
+    <Color x:Key="PrimaryGreen">#2D7D32</Color>
+    <Color x:Key="PrimaryGreenLight">#43A047</Color>
+    <Color x:Key="PrimaryGreenDark">#1B5E20</Color>
+    <Color x:Key="AccentGold">#F9A825</Color>
+    <Color x:Key="AccentGoldLight">#FBC02D</Color>
+
+    <!-- Semantic -->
+    <Color x:Key="PageBackground">#F5F5F5</Color>
+    <Color x:Key="CardBackground">#FFFFFF</Color>
+    <Color x:Key="TextPrimary">#212121</Color>
+    <Color x:Key="TextSecondary">#757575</Color>
+    <Color x:Key="TextHint">#BDBDBD</Color>
+    <Color x:Key="Divider">#E0E0E0</Color>
+    <Color x:Key="ErrorRed">#D32F2F</Color>
+    <Color x:Key="SuccessGreen">#388E3C</Color>
+    <Color x:Key="WarningOrange">#F57C00</Color>
+    <Color x:Key="InfoBlue">#1976D2</Color>
+
+    <!-- Tab bar -->
+    <Color x:Key="TabBarBackground">#FFFFFF</Color>
+    <Color x:Key="TabBarSelected">#2D7D32</Color>
+    <Color x:Key="TabBarUnselected">#9E9E9E</Color>
+
+</ResourceDictionary>

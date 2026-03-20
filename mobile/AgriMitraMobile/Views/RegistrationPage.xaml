@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:AgriMitraMobile.ViewModels"
+    x:Class="AgriMitraMobile.Views.RegistrationPage"
+    x:DataType="vm:RegistrationViewModel"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBackground}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,48,24,32" Spacing="0">
+
+            <!-- Logo + tagline -->
+            <Image Source="agrimitra_logo.svg"
+                   HeightRequest="72" WidthRequest="72"
+                   HorizontalOptions="Center" Margin="0,0,0,12" />
+            <Label Text="AgriMitra"
+                   FontSize="28" FontAttributes="Bold"
+                   TextColor="{StaticResource PrimaryGreen}"
+                   HorizontalOptions="Center" />
+            <Label Text="AI-Powered Crop Yield Prediction"
+                   FontSize="13" TextColor="{StaticResource TextSecondary}"
+                   HorizontalOptions="Center" Margin="0,2,0,32" />
+
+            <!-- Language pills -->
+            <Label Text="Select Language / भाषा चुनें / भाषा निवडा"
+                   Style="{StaticResource CaptionText}"
+                   HorizontalOptions="Center" Margin="0,0,0,10" />
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="0,0,0,28">
+                <Border Style="{StaticResource PillUnselected}"
+                        x:Name="PillMr">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnLanguageTapped" CommandParameter="mr" />
+                    </Border.GestureRecognizers>
+                    <Label x:Name="LblMr" Text="मराठी" FontSize="14"
+                           TextColor="{StaticResource PrimaryGreen}" />
+                </Border>
+                <Border Style="{StaticResource PillUnselected}"
+                        x:Name="PillHi">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnLanguageTapped" CommandParameter="hi" />
+                    </Border.GestureRecognizers>
+                    <Label x:Name="LblHi" Text="हिन्दी" FontSize="14"
+                           TextColor="{StaticResource PrimaryGreen}" />
+                </Border>
+                <Border Style="{StaticResource PillUnselected}"
+                        x:Name="PillEn">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnLanguageTapped" CommandParameter="en" />
+                    </Border.GestureRecognizers>
+                    <Label x:Name="LblEn" Text="English" FontSize="14"
+                           TextColor="{StaticResource PrimaryGreen}" />
+                </Border>
+            </HorizontalStackLayout>
+
+            <!-- Form card -->
+            <Border Style="{StaticResource Card}" Margin="0,0,0,20">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="Your Name *" Style="{StaticResource BodyText}" />
+                    <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Divider}"
+                            BackgroundColor="White">
+                        <Entry Placeholder="e.g. Ramesh Patil"
+                               Text="{Binding Name}"
+                               Style="{StaticResource InputEntry}"
+                               Margin="12,0" />
+                    </Border>
+
+                    <Label Text="Mobile Number *" Style="{StaticResource BodyText}" />
+                    <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Divider}"
+                            BackgroundColor="White">
+                        <Entry Placeholder="10-digit mobile number"
+                               Text="{Binding Phone}"
+                               Keyboard="Telephone"
+                               Style="{StaticResource InputEntry}"
+                               Margin="12,0" />
+                    </Border>
+
+                    <Label Text="District" Style="{StaticResource BodyText}" />
+                    <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Divider}"
+                            BackgroundColor="White" Padding="8,0">
+                        <Picker Title="Select district"
+                                ItemsSource="{Binding Districts}"
+                                SelectedItem="{Binding District}"
+                                TextColor="{StaticResource TextPrimary}" />
+                    </Border>
+
+                    <Label Text="Village / Taluka" Style="{StaticResource BodyText}" />
+                    <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Divider}"
+                            BackgroundColor="White">
+                        <Entry Placeholder="e.g. Kankavli"
+                               Text="{Binding Village}"
+                               Style="{StaticResource InputEntry}"
+                               Margin="12,0" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- CTA -->
+            <Button Text="Get Started →"
+                    Command="{Binding RegisterCommand}"
+                    Style="{StaticResource PrimaryButton}"
+                    IsEnabled="{Binding IsNotBusy}"
+                    Margin="0,0,0,12" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               Color="{StaticResource PrimaryGreen}"
+                               HorizontalOptions="Center" />
+
+            <Button Text="I already have an account"
+                    Command="{Binding LoginCommand}"
+                    Style="{StaticResource GhostButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,8,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

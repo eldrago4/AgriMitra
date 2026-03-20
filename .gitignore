@@ -1,0 +1,75 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+ai/.venv/
+ai/venv/
+.venv/
+ai/.env
+ai/data/
+ai/outputs/*.onnx
+ai/outputs/checkpoints/
+ai/outputs/logs/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── .NET / MAUI ───────────────────────────────────────────────────────────────
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+*.DotSettings.user
+TestResults/
+*.nupkg
+project.lock.json
+packages/
+*.pubxml
+*.pubxml.user
+
+# ── Node.js / Next.js ─────────────────────────────────────────────────────────
+node_modules/
+.next/
+.vercel/
+nextjs-api/.env
+nextjs-api/.env.local
+nextjs-api/.env*.local
+nextjs-api/out/
+
+# ── Environment / secrets ─────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor ────────────────────────────────────────────────────────────────────
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Large model files (use install.ps1 to rebuild) ───────────────────────────
+*.onnx
+deploy/agrimitra_int8.onnx
+mobile/AgriMitraMobile/Resources/Raw/*.onnx
+
+# ── LaTeX build artefacts ─────────────────────────────────────────────────────
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/*.bbl
+report/*.blg
+report/*.fls
+report/*.fdb_latexmk
+report/*.synctex.gz

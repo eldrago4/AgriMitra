@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:AgriMitraMobile.ViewModels"
+    x:Class="AgriMitraMobile.Views.PredictionLoadingPage"
+    x:DataType="vm:PredictionLoadingViewModel"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PrimaryGreen}">
+
+    <VerticalStackLayout
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        Spacing="24"
+        Padding="40">
+
+        <!-- Logo -->
+        <Image Source="agrimitra_logo.svg"
+               HeightRequest="80" WidthRequest="80"
+               HorizontalOptions="Center" />
+
+        <!-- Spinner -->
+        <ActivityIndicator IsRunning="True"
+                           Color="White"
+                           HeightRequest="56"
+                           HorizontalOptions="Center" />
+
+        <!-- Status text -->
+        <Label Text="{Binding StatusMessage}"
+               TextColor="White"
+               FontSize="17" FontAttributes="Bold"
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center" />
+
+        <!-- Offline badge -->
+        <Border StrokeShape="RoundRectangle 20"
+                BackgroundColor="#33FFFFFF"
+                Stroke="Transparent"
+                Padding="14,7"
+                HorizontalOptions="Center"
+                IsVisible="{Binding IsOffline}">
+            <Label Text="⚡ Offline Mode — On-Device AI"
+                   TextColor="White" FontSize="13" />
+        </Border>
+
+        <Label Text="Analyzing satellite data &amp; IoT sensors…"
+               TextColor="#CCFFFFFF"
+               FontSize="13"
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center" />
+
+    </VerticalStackLayout>
+</ContentPage>

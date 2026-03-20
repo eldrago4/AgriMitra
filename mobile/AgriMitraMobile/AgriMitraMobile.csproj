@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0-android</TargetFrameworks>
+    <RootNamespace>AgriMitraMobile</RootNamespace>
+    <OutputType>Exe</OutputType>
+    <UseMaui>true</UseMaui>
+    <UseMauiMaps>true</UseMauiMaps>
+    <SingleProject>true</SingleProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- App Info -->
+    <ApplicationTitle>AgriMitra</ApplicationTitle>
+    <ApplicationId>com.agrimitra.mobile</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+
+    <!-- Android -->
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <!-- iOS (not targeted but kept for future) -->
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
+  <!-- App icon & splash screen -->
+  <ItemGroup>
+    <MauiIcon Include="Resources/Images/appicon.svg" ForegroundFile="Resources/Images/appiconfg.svg" Color="#2D7D32" />
+    <MauiSplashScreen Include="Resources/Images/splash.svg" Color="#2D7D32" BaseSize="128,128" />
+    <MauiImage Include="Resources/Images/**" Exclude="Resources/Images/appicon.svg;Resources/Images/appiconfg.svg;Resources/Images/splash.svg" />
+    <MauiFont Include="Resources/Fonts/**" />
+    <MauiAsset Include="Resources/Raw/**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <!-- NuGet packages -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls"              Version="10.0.20" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.20" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug"   Version="10.0.0" />
+    <PackageReference Include="Microsoft.Maui.Maps"                  Version="10.0.20" />
+    <PackageReference Include="Microsoft.Maui.Controls.Maps"        Version="10.0.20" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime"             Version="1.17.3" />
+    <PackageReference Include="sqlite-net-pcl"                       Version="1.9.172" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green"            Version="2.1.8" />
+    <PackageReference Include="CommunityToolkit.Mvvm"                Version="8.3.2" />
+    <PackageReference Include="CommunityToolkit.Maui"                Version="13.0.0" />
+  </ItemGroup>
+
+</Project>

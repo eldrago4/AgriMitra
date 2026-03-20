@@ -1,0 +1,215 @@
+% ╔══════════════════════════════════════════════════════════════════════════╗
+% ║  AgriMitra — Crop Yield Prediction                                      ║
+% ║  B.E. Project Report, SSPM College of Engineering, Kankavali            ║
+% ║  University of Mumbai | Academic Year 2025-26                           ║
+% ╚══════════════════════════════════════════════════════════════════════════╝
+\documentclass[12pt,a4paper]{report}
+
+% ── xcolor option pre-declaration (must precede eso-pic / tikz / colortbl) ──
+\PassOptionsToPackage{table}{xcolor}
+
+% ── Encoding and Language ────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% ── Typography ───────────────────────────────────────────────────────────────
+\usepackage{lmodern}
+\usepackage{upgreek}
+\usepackage{url}
+\usepackage{lipsum}
+
+% ── Page Layout ──────────────────────────────────────────────────────────────
+\usepackage[left=3.81cm,right=2.54cm,top=2.54cm,bottom=2.54cm]{geometry}
+\usepackage[onehalfspacing]{setspace}
+
+
+% ── Chapter / Section Fonts ───────────────────────────────────────────────────
+\usepackage{sectsty}
+\chapterfont{\centering}
+
+% ── Math ─────────────────────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+
+% ── Graphics and Figures ─────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage[font={footnotesize,it}]{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{lscape}
+\usepackage{eso-pic}
+\usepackage{pdfpages}
+
+% ── Tables ───────────────────────────────────────────────────────────────────
+\usepackage[table]{xcolor}
+\usepackage{colortbl}
+\usepackage{array}
+\newcolumntype{P}[1]{>{\raggedright\vrule height4ex width 0pt}p{#1}<{\vrule depth 2.5ex width 0pt}}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{supertabular}
+\usepackage{longtable}
+
+% ── TikZ and Diagrams ────────────────────────────────────────────────────────
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+\tikzset{
+  startstop/.style = {ellipse,    draw, fill=blue!20,   align=center, minimum width=3cm},
+  process/.style   = {rectangle,  draw, fill=green!20,  align=center,
+                      minimum width=3.5cm, minimum height=1.2cm},
+  decision/.style  = {diamond,    draw, fill=yellow!20, align=center, aspect=2},
+  arrow/.style     = {thick,->,>=stealth}
+}
+
+% ── Code Listings ────────────────────────────────────────────────────────────
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  tabsize=4,
+  showstringspaces=false,
+  keywordstyle=\bfseries\color{blue!70!black},
+  commentstyle=\itshape\color{green!40!black},
+  stringstyle=\color{red!60!black}
+}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% ── References ───────────────────────────────────────────────────────────────
+\usepackage[numbers,sort&compress]{natbib}
+
+% ── Hyperlinks (load LAST) ────────────────────────────────────────────────────
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  linkcolor=black,
+  urlcolor=black
+}
+
+% ── Misc ─────────────────────────────────────────────────────────────────────
+\usepackage{makeidx}
+\makeindex
+
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── Blank opening page ───────────────────────────────────────────────────────
+\shipout\null
+
+% ── Front matter: no page numbers ────────────────────────────────────────────
+\pagenumbering{gobble}
+
+\input{Title}
+\input{Dedication}
+\input{Certificate}
+
+\newpage
+\input{Approval_Sheet}
+
+\newpage
+\input{Declaration}
+
+\newpage
+\input{Abstract}
+
+% ── Preliminary pages: Roman numerals ────────────────────────────────────────
+\pagenumbering{roman}
+
+\tableofcontents
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+
+\input{Abbreviations}
+
+% ── Main content: Arabic numerals ─────────────────────────────────────────────
+\newpage
+\pagenumbering{arabic}
+
+%% ═══════════════════════════════════════════════════════════════════════════
+\chapter{Introduction}
+\input{Introduction}
+\input{Research Gaps}
+\input{Problem Statement and Objectives}
+
+%% ═══════════════════════════════════════════════════════════════════════════
+\newpage
+\chapter{Literature Review}
+\input{Literature Review}
+
+\newpage
+\begin{table}[H]
+    \caption{Literature Review on Smart Agriculture and Crop Yield Prediction}
+    \centering
+    \begin{tabular}{|p{3cm}|p{5.5cm}|p{3.5cm}|p{2.5cm}|}
+    \hline
+    \textbf{Author and Year} & \textbf{Methods} & \textbf{Results / Findings} & \textbf{Future Scope} \\
+    \hline
+    ISRO Researchers \cite{isro2023bhuvan} (2023) & Remote sensing and multi-temporal satellite imagery for crop stress detection in India & Enabled early identification of pest or water stress and improved yield estimation accuracy & Integration with AI-based field-level models \\
+    \hline
+    Long Li et al. \cite{li2025vision} (2025) & Vision--Language transformer with federated learning for multimodal crop monitoring & Enhanced prediction by combining imagery, weather, and soil data while preserving data privacy & Adaptation for Indian smallholder datasets \\
+    \hline
+    Patel and Singh \cite{patel2024imputation} (2024) & Federated learning for decentralized crop yield prediction and disease detection across Indian regions & Improved model generalization without centralizing farmer data & Broader dataset inclusion and model interpretability \\
+    \hline
+    Sharma et al. \cite{sharma2023integrating} (2023) & TinyML deployment on low-cost edge devices for monitoring animal intrusion and soil parameters & Achieved real-time detection with low latency and power consumption & Expansion to multi-sensor integration for smart farming \\
+    \hline
+    Das and Borthakur \cite{das2023federated} (2023) & Federated learning for crop disease detection using localized datasets in Indian agriculture & Demonstrated privacy-preserving model training without data centralization & Broader multi-state dataset inclusion \\
+    \hline
+    Liu et al. \cite{liu2022swin3d} (2022) & Video Swin Transformer for spatiotemporal feature extraction & State-of-the-art performance on video recognition benchmarks (Kinetics-400/600) & Application to agricultural satellite time-series \\
+    \hline
+    Krishnan et al. \cite{krishnan2023reconstruction} (2023) & Deep learning-based data reconstruction for sensor malfunction correction in Tamil Nadu farms & Increased reliability of yield datasets for AI-driven prediction models & Expansion to real-time correction using streaming data \\
+    \hline
+    \end{tabular}
+    \label{tab:lit_review_agri}
+\end{table}
+
+%% ═══════════════════════════════════════════════════════════════════════════
+\newpage
+\chapter{Methodology and Implementation}
+\input{Proposed System}
+\newpage
+\input{Experimental Setup}
+\newpage
+\input{Implementation}
+
+%% ═══════════════════════════════════════════════════════════════════════════
+\newpage
+\chapter{Results and Discussion}
+\input{Results}
+
+%% ═══════════════════════════════════════════════════════════════════════════
+\newpage
+\chapter{Conclusion}
+\input{Conclusion}
+
+% ── Back matter ──────────────────────────────────────────────────────────────
+%\newpage
+%\input{Publications}
+
+\newpage
+\input{Implementation Plan}
+
+\newpage
+\input{Appendix}
+
+\input{Acknowledgement}
+
+\addcontentsline{toc}{chapter}{References}
+\bibliography{Synopsis}
+\bibliographystyle{unsrt}
+
+\newpage
+\shipout\null
+\shipout\null
+
+\end{document}

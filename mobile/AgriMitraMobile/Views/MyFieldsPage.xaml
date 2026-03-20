@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:AgriMitraMobile.ViewModels"
+    x:Class="AgriMitraMobile.Views.MyFieldsPage"
+    x:DataType="vm:MyFieldsViewModel"
+    Title="My Fields"
+    BackgroundColor="{StaticResource PageBackground}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Add Field FAB area -->
+        <Button Grid.Row="0"
+                Text="+ Add New Field"
+                Command="{Binding AddFieldCommand}"
+                Style="{StaticResource PrimaryButton}"
+                Margin="20,12" />
+
+        <!-- Loading -->
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsBusy}"
+                           Color="{StaticResource PrimaryGreen}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           IsVisible="{Binding IsBusy}" />
+
+        <!-- Empty state -->
+        <VerticalStackLayout Grid.Row="1"
+                             HorizontalOptions="Center" VerticalOptions="Center"
+                             Spacing="12" Padding="40"
+                             IsVisible="{Binding IsEmpty}">
+            <Label Text="&#xE55B;" FontFamily="MaterialIcons"
+                   FontSize="64" TextColor="{StaticResource TextHint}"
+                   HorizontalOptions="Center" />
+            <Label Text="No fields yet"
+                   FontSize="18" FontAttributes="Bold"
+                   TextColor="{StaticResource TextSecondary}"
+                   HorizontalOptions="Center" />
+            <Label Text="Draw your farm boundary on the map to get your first yield prediction."
+                   Style="{StaticResource BodyText}"
+                   HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+
+        <!-- Fields list -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Fields}"
+                        Margin="16,0"
+                        IsVisible="{Binding IsEmpty, Converter={StaticResource InvertBool}}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:FieldSummary">
+                    <Border Style="{StaticResource Card}" Margin="0,6">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding Label}"
+                                   FontSize="16" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+                            <Label Grid.Row="0" Grid.Column="1"
+                                   Text="{Binding AreaText}"
+                                   Style="{StaticResource CaptionText}" />
+
+                            <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="8">
+                                <Label Text="{Binding LastCrop}"
+                                       Style="{StaticResource BodyText}"
+                                       IsVisible="{Binding HasPred}" />
+                                <Label Text="•"
+                                       Style="{StaticResource BodyText}"
+                                       IsVisible="{Binding HasPred}" />
+                                <Label Text="{Binding LastYield}"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryGreen}"
+                                       FontSize="14"
+                                       IsVisible="{Binding HasPred}" />
+                                <Label Text="No predictions yet"
+                                       Style="{StaticResource BodyText}"
+                                       IsVisible="{Binding HasPred, Converter={StaticResource InvertBool}}" />
+                            </HorizontalStackLayout>
+
+                            <Label Grid.Row="2" Grid.ColumnSpan="2"
+                                   Text="{Binding LastDate}"
+                                   Style="{StaticResource CaptionText}"
+                                   Margin="0,4,0,0"
+                                   IsVisible="{Binding HasPred}" />
+
+                            <!-- Tap overlay -->
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MyFieldsViewModel}},
+                                                      Path=OpenFieldCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</ContentPage>

@@ -1,0 +1,55 @@
+\chapter*{\centering Appendix}
+\addcontentsline{toc}{chapter}{Appendix}
+
+\section*{Appendix I: Dataset Schema and Satellite Imagery Specifications}
+
+The AgriMitra system ingests data from three sources. Table~\ref{tab:iot_schema} describes the IoT sensor field schema used as node features in the GATv2 Graph Neural Network.
+
+\begin{table}[H]
+\centering
+\caption{IoT Sensor Node Feature Schema}
+\label{tab:iot_schema}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Feature} & \textbf{Unit} & \textbf{Range (typical)} \\
+\hline
+Soil Nitrogen (N)      & mg/kg  & 0--300   \\
+Soil Phosphorus (P)    & mg/kg  & 0--150   \\
+Soil Potassium (K)     & mg/kg  & 0--500   \\
+Soil Moisture          & \%     & 5--60    \\
+Soil pH                & --     & 4.5--8.5 \\
+Soil Temperature       & $^\circ$C & 10--45 \\
+NDVI (Bhuvan API)      & --     & $-$1 to 1 \\
+Field Elevation        & m      & 0--900   \\
+\hline
+\end{tabular}
+\end{table}
+
+Satellite imagery was sourced from ISRO's Cartosat-3 and Resourcesat-2 sensors. Each farm polygon was rasterised to a $224 \times 224$ pixel tile at 5\,m spatial resolution. Four spectral channels were extracted: Red (620--690\,nm), Green (520--590\,nm), Near-Infrared (NIR, 770--860\,nm), and Short-Wave Infrared (SWIR, 1550--1750\,nm). Twelve weekly observations spanning one growing season were stacked to form the input tensor $\mathbf{S} \in \mathbb{R}^{4 \times 12 \times 224 \times 224}$.
+
+\section*{Appendix II: ONNX Model Export Configuration}
+
+The trained PyTorch fusion model was exported to ONNX opset~17 with the following configuration. Dynamic axes were enabled on the batch dimension of the satellite tensor to support variable batch sizes during server inference. The INT8 quantisation targets all \texttt{torch.nn.Linear} and \texttt{torch.nn.LayerNorm} layers using dynamic quantisation, which does not require a calibration dataset.
+
+\begin{table}[H]
+\centering
+\caption{ONNX Export and Quantisation Configuration}
+\label{tab:onnx_config}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Parameter}           & \textbf{Value}                        \\
+\hline
+PyTorch version              & 2.2                                   \\
+ONNX opset version           & 17                                    \\
+Input: satellite tensor      & $(B,\;4,\;12,\;224,\;224)$            \\
+Input: graph node features   & $(N,\;8)$                             \\
+Input: edge index            & $(2,\;E)$                             \\
+Output: yield prediction     & $(B,)$ quintals/hectare               \\
+Quantisation method          & Dynamic (post-training)               \\
+Quantised layers             & \texttt{Linear}, \texttt{LayerNorm}   \\
+Target dtype                 & \texttt{torch.qint8}                  \\
+ONNX Runtime version         & 1.17                                  \\
+Target platform              & Android (Snapdragon 665, 4\,GB RAM)   \\
+\hline
+\end{tabular}
+\end{table}

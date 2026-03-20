@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriMitra Training UI</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+           background: #f5f5f5; color: #212121; }
+
+    header { background: #2D7D32; color: white; padding: 16px 24px;
+             display: flex; align-items: center; gap: 12px; }
+    header h1 { font-size: 1.25rem; font-weight: 700; }
+    header span { font-size: 0.85rem; opacity: 0.8; }
+
+    .container { max-width: 1100px; margin: 24px auto; padding: 0 16px;
+                 display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .card { background: white; border-radius: 12px; padding: 20px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;
+               color: #757575; margin-bottom: 16px; }
+    .full-width { grid-column: 1 / -1; }
+
+    /* Status badge */
+    #status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px;
+                    font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
+    .status-idle    { background: #E0E0E0; color: #616161; }
+    .status-running { background: #E8F5E9; color: #2E7D32; }
+    .status-paused  { background: #FFF8E1; color: #F57F17; }
+    .status-done    { background: #E3F2FD; color: #1565C0; }
+    .status-stopped, .status-error { background: #FFEBEE; color: #C62828; }
+
+    /* Controls */
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    button { padding: 10px 20px; border: none; border-radius: 8px; font-size: 0.9rem;
+             font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+    button:hover { opacity: 0.85; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    #btn-start  { background: #2D7D32; color: white; }
+    #btn-pause  { background: #F9A825; color: white; }
+    #btn-resume { background: #1565C0; color: white; }
+    #btn-stop   { background: #C62828; color: white; }
+    #btn-export { background: #6A1B9A; color: white; }
+
+    /* Epoch inputs */
+    .epoch-input { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .epoch-input label { font-size: 0.85rem; color: #616161; }
+    .epoch-input input[type=number] { width: 80px; padding: 6px 10px; border: 1px solid #BDBDBD;
+                                       border-radius: 6px; font-size: 0.9rem; }
+    .epoch-input input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; }
+
+    /* Progress */
+    .progress-wrap { margin: 12px 0; }
+    .progress-label { display: flex; justify-content: space-between;
+                      font-size: 0.8rem; color: #757575; margin-bottom: 6px; }
+    progress { width: 100%; height: 10px; border-radius: 5px;
+               -webkit-appearance: none; appearance: none; }
+    progress::-webkit-progress-bar  { background: #E0E0E0; border-radius: 5px; }
+    progress::-webkit-progress-value{ background: #2D7D32; border-radius: 5px; }
+
+    /* Metrics table */
+    .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .metric { background: #F5F5F5; border-radius: 8px; padding: 10px 14px; }
+    .metric .label { font-size: 0.75rem; color: #9E9E9E; text-transform: uppercase; }
+    .metric .value { font-size: 1.3rem; font-weight: 700; color: #212121; margin-top: 2px; }
+
+    /* Chart */
+    canvas { max-height: 260px; }
+
+    /* ETA */
+    #eta { font-size: 0.85rem; color: #757575; margin-top: 8px; }
+
+    /* Export result */
+    #export-result { margin-top: 12px; font-size: 0.85rem; color: #2E7D32; }
+    #export-result.error { color: #C62828; }
+
+    @media (max-width: 640px) {
+      .container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌾 AgriMitra Training UI</h1>
+    <span>Swin3D + GATv2 Multi-Modal Fusion — Crop Yield Prediction</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Controls card -->
+  <div class="card">
+    <h2>Training Controls</h2>
+
+    <div class="epoch-input">
+      <label>Epochs:</label>
+      <input type="number" id="n-epochs" value="80" min="1" max="200" />
+      <label><input type="checkbox" id="resume-ckpt" /> Resume from checkpoint</label>
+    </div>
+
+    <div>
+      Status: <span id="status-badge" class="status-idle">Idle</span>
+    </div>
+
+    <div id="eta"></div>
+
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progress-label">Epoch 0 / 80</span>
+        <span id="lr-label">LR: —</span>
+      </div>
+      <progress id="epoch-progress" value="0" max="80"></progress>
+    </div>
+
+    <div class="controls">
+      <button id="btn-start"  onclick="startTraining()">▶ Start</button>
+      <button id="btn-pause"  onclick="pauseTraining()" disabled>⏸ Pause</button>
+      <button id="btn-resume" onclick="resumeTraining()" disabled>⏵ Resume</button>
+      <button id="btn-stop"   onclick="stopTraining()"  disabled>■ Stop</button>
+    </div>
+  </div>
+
+  <!-- Metrics card -->
+  <div class="card">
+    <h2>Current Metrics</h2>
+    <div class="metrics">
+      <div class="metric"><div class="label">Train Loss</div><div class="value" id="m-loss">—</div></div>
+      <div class="metric"><div class="label">Val MAE (q/ha)</div><div class="value" id="m-mae">—</div></div>
+      <div class="metric"><div class="label">Val R²</div><div class="value" id="m-r2">—</div></div>
+      <div class="metric"><div class="label">Val MAPE</div><div class="value" id="m-mape">—</div></div>
+    </div>
+  </div>
+
+  <!-- Loss chart -->
+  <div class="card full-width">
+    <h2>Training Progress</h2>
+    <canvas id="loss-chart"></canvas>
+  </div>
+
+  <!-- Export card -->
+  <div class="card full-width">
+    <h2>Export to ONNX</h2>
+    <p style="font-size:0.85rem;color:#757575;margin-bottom:12px;">
+      Exports the best saved checkpoint to FP32 then INT8-quantized ONNX.
+      Copy the INT8 model to <code>deploy/</code> and <code>mobile/Resources/Raw/</code>.
+    </p>
+    <button id="btn-export" onclick="exportModel()">⬇ Export Best Model to ONNX INT8</button>
+    <div id="export-result"></div>
+  </div>
+
+</div>
+
+<script>
+// ── Chart setup ───────────────────────────────────────────────────────────────
+const ctx = document.getElementById('loss-chart').getContext('2d');
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [
+      { label: 'Train Loss',  data: [], borderColor: '#2D7D32', tension: 0.3, fill: false },
+      { label: 'Val MAE',     data: [], borderColor: '#1565C0', tension: 0.3, fill: false },
+    ]
+  },
+  options: {
+    animation: false,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      x: { title: { display: true, text: 'Epoch' } },
+      y: { title: { display: true, text: 'Value' }, beginAtZero: true }
+    }
+  }
+});
+
+function updateChart(history) {
+  chart.data.labels = history.map(h => h.epoch + 1);
+  chart.data.datasets[0].data = history.map(h => h.train_loss);
+  chart.data.datasets[1].data = history.map(h => h.val_mae);
+  chart.update('none');
+}
+
+// ── Status polling ────────────────────────────────────────────────────────────
+let pollInterval = null;
+let totalEpochs  = 80;
+
+function updateUI(data) {
+  // Status badge
+  const badge = document.getElementById('status-badge');
+  badge.textContent = data.status;
+  badge.className   = 'status-' + data.status;
+
+  // Progress
+  const ep = data.epoch || 0;
+  totalEpochs = Math.max(totalEpochs, ep + 1);
+  document.getElementById('epoch-progress').max   = totalEpochs;
+  document.getElementById('epoch-progress').value = ep;
+  document.getElementById('progress-label').textContent = `Epoch ${ep} / ${totalEpochs}`;
+
+  // LR
+  const lastH = (data.history || []).slice(-1)[0];
+  if (lastH) document.getElementById('lr-label').textContent = `LR: ${lastH.lr}`;
+
+  // ETA
+  if (data.eta_seconds) {
+    const mins = Math.floor(data.eta_seconds / 60);
+    const secs = data.eta_seconds % 60;
+    document.getElementById('eta').textContent = `ETA: ${mins}m ${secs}s`;
+  }
+
+  // Metrics
+  if (data.train_loss) document.getElementById('m-loss').textContent  = data.train_loss.toFixed(4);
+  if (data.val_mae)    document.getElementById('m-mae').textContent   = data.val_mae.toFixed(3);
+  if (data.val_r2)     document.getElementById('m-r2').textContent    = data.val_r2.toFixed(3);
+  if (data.val_mape)   document.getElementById('m-mape').textContent  = data.val_mape.toFixed(1) + '%';
+
+  // Chart
+  if (data.history && data.history.length > 0) updateChart(data.history);
+
+  // Button states
+  const running = data.status === 'running';
+  const paused  = data.status === 'paused';
+  const idle    = ['idle', 'done', 'stopped', 'error'].includes(data.status);
+  document.getElementById('btn-start').disabled  = running || paused;
+  document.getElementById('btn-pause').disabled  = !running;
+  document.getElementById('btn-resume').disabled = !paused;
+  document.getElementById('btn-stop').disabled   = idle;
+}
+
+function startPolling() {
+  if (pollInterval) clearInterval(pollInterval);
+  pollInterval = setInterval(async () => {
+    try {
+      const r = await fetch('/status');
+      const d = await r.json();
+      updateUI(d);
+      if (['done', 'stopped', 'error'].includes(d.status)) clearInterval(pollInterval);
+    } catch(e) {}
+  }, 2000);
+}
+
+// ── Control functions ─────────────────────────────────────────────────────────
+async function startTraining() {
+  const n   = parseInt(document.getElementById('n-epochs').value) || 80;
+  const res = document.getElementById('resume-ckpt').checked;
+  totalEpochs = n;
+  const r = await fetch('/start', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ n_epochs: n, resume: res })
+  });
+  const d = await r.json();
+  if (d.error) { alert(d.error); return; }
+  startPolling();
+}
+
+async function pauseTraining() {
+  await fetch('/pause', { method: 'POST' });
+}
+
+async function resumeTraining() {
+  await fetch('/resume', { method: 'POST' });
+}
+
+async function stopTraining() {
+  if (!confirm('Stop training? Progress up to the last checkpoint is saved.')) return;
+  await fetch('/stop', { method: 'POST' });
+}
+
+async function exportModel() {
+  const el = document.getElementById('export-result');
+  el.className = '';
+  el.textContent = 'Exporting … (this may take a minute)';
+  try {
+    const r = await fetch('/export', { method: 'POST' });
+    const d = await r.json();
+    if (d.error) {
+      el.className = 'error';
+      el.textContent = '✗ ' + d.error;
+    } else {
+      el.textContent = `✓ FP32: ${d.fp32_mb} MB → INT8: ${d.int8_mb} MB | ${d.int8_path}`;
+    }
+  } catch(e) {
+    el.className = 'error';
+    el.textContent = '✗ Export failed: ' + e.message;
+  }
+}
+
+// ── Initial status fetch ──────────────────────────────────────────────────────
+fetch('/status').then(r => r.json()).then(updateUI).catch(() => {});
+</script>
+</body>
+</html>

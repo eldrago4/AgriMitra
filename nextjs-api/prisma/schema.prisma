@@ -1,0 +1,69 @@
+// AgriMitra Prisma Schema for Vercel Postgres (Neon)
+// Run: npx prisma generate && npx prisma db push
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Farmer {
+  id          String      @id @default(cuid())
+  name        String
+  phone       String      @unique
+  village     String
+  district    String
+  language    String      @default("en")
+  createdAt   DateTime    @default(now())
+
+  fields      FarmField[]
+}
+
+model FarmField {
+  id              String          @id @default(cuid())
+  farmerId        String
+  polygonGeoJson  String          // GeoJSON string
+  areaHectares    Float
+  label           String          @default("My Field")
+  createdAt       DateTime        @default(now())
+
+  farmer          Farmer          @relation(fields: [farmerId], references: [id])
+  sensorReadings  SensorReading[]
+  predictions     Prediction[]
+}
+
+model SensorReading {
+  id          String    @id @default(cuid())
+  fieldId     String
+  deviceId    String?
+  soilN       Float
+  soilP       Float
+  soilK       Float
+  moisture    Float
+  ph          Float
+  temperature Float
+  timestamp   DateTime  @default(now())
+
+  field       FarmField @relation(fields: [fieldId], references: [id])
+}
+
+model Prediction {
+  id                  String    @id @default(cuid())
+  fieldId             String
+  cropType            String
+  season              String?
+  plantingDate        String?
+  predictedYield      Float
+  uncertaintyBand     Float
+  fertilizerAdvisory  String
+  irrigationAdvisory  String
+  marketAdvisory      String
+  inferenceLatencyMs  Int
+  modelVersion        String
+  createdAt           DateTime  @default(now())
+
+  field               FarmField @relation(fields: [fieldId], references: [id])
+}

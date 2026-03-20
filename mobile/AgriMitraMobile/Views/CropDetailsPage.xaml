@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:AgriMitraMobile.ViewModels"
+    xmlns:sys="clr-namespace:System;assembly=netstandard"
+    x:Class="AgriMitraMobile.Views.CropDetailsPage"
+    x:DataType="vm:CropDetailsViewModel"
+    Title="Crop Details"
+    BackgroundColor="{StaticResource PageBackground}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,16" Spacing="0">
+
+            <!-- Area info chip -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#E8F5E9" Stroke="Transparent"
+                    Padding="14,8" HorizontalOptions="Start" Margin="0,0,0,20">
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="&#xE55B;" FontFamily="MaterialIcons"
+                           FontSize="18" TextColor="{StaticResource PrimaryGreen}"
+                           VerticalOptions="Center" />
+                    <Label Text="{Binding AreaHectares, StringFormat='Field area: {0:F2} ha'}"
+                           FontSize="14" TextColor="{StaticResource PrimaryGreen}"
+                           FontAttributes="Bold" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Crop selection -->
+            <Label Text="Select Crop" Style="{StaticResource SectionHeader}" />
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                <Picker Title="Choose crop..."
+                        ItemsSource="{Binding Crops}"
+                        SelectedItem="{Binding SelectedCrop, Mode=TwoWay}"
+                        TextColor="{StaticResource TextPrimary}"
+                        TitleColor="{StaticResource TextSecondary}"
+                        FontSize="15" />
+            </Border>
+
+            <!-- Season badge (auto-set from crop) -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#F1F8E9" Stroke="Transparent"
+                    Padding="12,6" HorizontalOptions="Start" Margin="0,-8,0,16">
+                <HorizontalStackLayout Spacing="6">
+                    <Label Text="&#xE5D6;" FontFamily="MaterialIcons"
+                           FontSize="15" TextColor="#558B2F"
+                           VerticalOptions="Center" />
+                    <Label Text="{Binding Season, StringFormat='Season: {0}'}"
+                           FontSize="13" TextColor="#558B2F"
+                           FontAttributes="Bold" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Planting / Harvest date -->
+            <Label Text="{Binding DateLabel}" Style="{StaticResource SectionHeader}" />
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                <DatePicker Date="{Binding PlantingDate, Mode=TwoWay}"
+                            Format="dd MMM yyyy"
+                            TextColor="{StaticResource TextPrimary}"
+                            MinimumDate="2020-01-01"
+                            MaximumDate="2026-12-31" />
+            </Border>
+
+            <!-- Irrigation type -->
+            <Label Text="Irrigation Type" Style="{StaticResource SectionHeader}" />
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                <Picker Title="Select irrigation type"
+                        ItemsSource="{Binding IrrigationTypes}"
+                        SelectedItem="{Binding IrrigationType, Mode=TwoWay}"
+                        TextColor="{StaticResource TextPrimary}"
+                        TitleColor="{StaticResource TextSecondary}"
+                        FontSize="15" />
+            </Border>
+
+            <!-- IoT toggle -->
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Grid.Column="0">
+                        <Label Text="Include IoT Sensor Data" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}" FontSize="15" />
+                        <Label Text="Soil N/P/K, moisture, pH, temperature"
+                               Style="{StaticResource BodyText}" />
+                    </VerticalStackLayout>
+                    <Switch Grid.Column="1"
+                            IsToggled="{Binding UseIotData}"
+                            OnColor="{StaticResource PrimaryGreen}"
+                            VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <!-- IoT inputs (shown when UseIotData = true) -->
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16"
+                    IsVisible="{Binding UseIotData}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Soil Nutrients &amp; Conditions" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}" FontSize="14" />
+
+                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto"
+                          ColumnSpacing="10" RowSpacing="10">
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                            <Label Text="N (mg/kg)" Style="{StaticResource CaptionText}" />
+                            <Entry Text="{Binding SoilN}" Keyboard="Numeric"
+                                   Placeholder="100" Style="{StaticResource InputEntry}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                            <Label Text="P (mg/kg)" Style="{StaticResource CaptionText}" />
+                            <Entry Text="{Binding SoilP}" Keyboard="Numeric"
+                                   Placeholder="50" Style="{StaticResource InputEntry}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="2">
+                            <Label Text="K (mg/kg)" Style="{StaticResource CaptionText}" />
+                            <Entry Text="{Binding SoilK}" Keyboard="Numeric"
+                                   Placeholder="200" Style="{StaticResource InputEntry}" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                            <Label Text="Moisture %" Style="{StaticResource CaptionText}" />
+                            <Entry Text="{Binding Moisture}" Keyboard="Numeric"
+                                   Placeholder="35" Style="{StaticResource InputEntry}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Label Text="pH" Style="{StaticResource CaptionText}" />
+                            <Entry Text="{Binding PH}" Keyboard="Numeric"
+                                   Placeholder="6.5" Style="{StaticResource InputEntry}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="2">
+                            <Label Text="Temp (°C)" Style="{StaticResource CaptionText}" />
+                            <Entry Text="{Binding Temperature}" Keyboard="Numeric"
+                                   Placeholder="28" Style="{StaticResource InputEntry}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Submit -->
+            <Button Text="Predict Yield →"
+                    Command="{Binding RunPredictionCommand}"
+                    Style="{StaticResource PrimaryButton}"
+                    IsEnabled="{Binding IsNotBusy}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               Color="{StaticResource PrimaryGreen}"
+                               HorizontalOptions="Center"
+                               Margin="0,8" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

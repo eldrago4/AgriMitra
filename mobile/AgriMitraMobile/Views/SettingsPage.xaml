@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:AgriMitraMobile.ViewModels"
+    x:Class="AgriMitraMobile.Views.SettingsPage"
+    x:DataType="vm:SettingsViewModel"
+    Title="Settings"
+    BackgroundColor="{StaticResource PageBackground}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,16" Spacing="0">
+
+            <!-- Profile section -->
+            <Label Text="Profile" Style="{StaticResource SectionHeader}" />
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                <VerticalStackLayout Spacing="10">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <Border Grid.Column="0"
+                                BackgroundColor="{StaticResource PrimaryGreen}"
+                                StrokeShape="RoundRectangle 30"
+                                Stroke="Transparent"
+                                WidthRequest="52" HeightRequest="52"
+                                Margin="0,0,14,0">
+                            <Label Text="&#xE7FD;" FontFamily="MaterialIcons"
+                                   FontSize="28" TextColor="White"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                            <Label Text="{Binding FarmerName}"
+                                   FontSize="16" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="{Binding PhoneNumber}"
+                                   Style="{StaticResource BodyText}" />
+                            <Label Text="{Binding District}"
+                                   Style="{StaticResource CaptionText}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Language -->
+            <Label Text="Language" Style="{StaticResource SectionHeader}" />
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                <VerticalStackLayout Spacing="12">
+                    <Picker Title="Select language"
+                            ItemsSource="{Binding LanguageLabels}"
+                            SelectedIndex="{Binding SelectedLanguageIndex}"
+                            TextColor="{StaticResource TextPrimary}" />
+                    <Button Text="Save Language"
+                            Command="{Binding SaveLanguageCommand}"
+                            Style="{StaticResource SecondaryButton}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- SMS notifications -->
+            <Label Text="SMS Notifications" Style="{StaticResource SectionHeader}" />
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Grid.Column="0">
+                        <Label Text="Receive yield alerts via SMS"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}" FontSize="15" />
+                        <Label Text="Weekly updates on crop prices &amp; weather"
+                               Style="{StaticResource BodyText}" />
+                    </VerticalStackLayout>
+                    <Switch Grid.Column="1"
+                            IsToggled="{Binding SmsOptIn}"
+                            OnColor="{StaticResource PrimaryGreen}"
+                            VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <!-- On-device model -->
+            <Label Text="AI Model" Style="{StaticResource SectionHeader}" />
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                <VerticalStackLayout Spacing="10">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="&#xE2C4;" FontFamily="MaterialIcons"
+                               FontSize="20" TextColor="{StaticResource PrimaryGreen}" />
+                        <Label Text="{Binding ModelStatus}"
+                               Style="{StaticResource BodyText}" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Button Text="Check for Model Update"
+                            Command="{Binding UpdateModelCommand}"
+                            Style="{StaticResource SecondaryButton}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Data management -->
+            <Label Text="Data" Style="{StaticResource SectionHeader}" />
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="{Binding AppVersion, StringFormat='Version {0}'}"
+                           Style="{StaticResource CaptionText}"
+                           HorizontalOptions="Center" />
+                    <Button Text="Clear Offline Cache"
+                            Command="{Binding ClearCacheCommand}"
+                            Style="{StaticResource SecondaryButton}"
+                            TextColor="{StaticResource WarningOrange}"
+                            BorderColor="{StaticResource WarningOrange}" />
+                    <Button Text="Logout / Remove Profile"
+                            Command="{Binding LogoutCommand}"
+                            Style="{StaticResource SecondaryButton}"
+                            TextColor="{StaticResource ErrorRed}"
+                            BorderColor="{StaticResource ErrorRed}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="AgriMitra — AI for Every Farmer"
+                   Style="{StaticResource CaptionText}"
+                   HorizontalOptions="Center"
+                   Margin="0,8,0,24" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

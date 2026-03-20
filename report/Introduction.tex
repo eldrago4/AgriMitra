@@ -1,0 +1,11 @@
+Indian agriculture sustains over 150 million livelihoods but faces severe economic strain, with annual losses estimated at 1.5 lakh crore rupees due to climate volatility and poor access to information. Smallholder farmers, who make up the bulk of food producers, work without reliable local data, which leads to poor decisions in both farm management and market timing. Closing this gap requires tools that are practically usable in rural conditions, not just technically impressive.
+
+Two specific problems drive these losses. The ``Precision Void'' refers to the absence of field-level data, which forces farmers to apply blanket practices for fertilizers and irrigation, often resulting in overuse or shortage. The ``Minimum Support Price Paradox'' describes how farmers consistently sell at below-floor prices not because MSP is unavailable, but because they have no way to forecast their yield ahead of time and plan their selling window. Both problems come down to one thing: farmers simply do not have the right information at the right time.
+
+This project builds an AI system that addresses both issues through village-level yield prediction and crop advisories. We combine ISRO satellite imagery, IoT sensor readings, and NDVI data from the Bhuvan API, processed through Swin3D Transformers for temporal analysis and Graph Neural Networks for spatial field dependencies.
+
+A key design goal was making the system work on low-cost hardware without a constant internet connection. The trained model is compressed using INT8 ONNX quantisation and runs directly on mid-range Android phones. For farmers without smartphones, the same advisories are delivered by SMS and IVR calls.
+
+The system targets at least a 15\% improvement in prediction accuracy over existing baselines, with measurable reduction in input wastage. For farming communities that have long been outside the reach of data-driven tools, access to even basic yield forecasts and market timing guidance can make a concrete difference to income and resource use.
+
+

@@ -1,0 +1,23 @@
+
+\section{Problem Statement and Objectives}
+
+\subsection{Problem Statement}
+The combined effect of poor precision in farming decisions and the lack of timely market awareness causes major economic losses and environmental damage for small-scale farmers. To address this, there is a need for a real-time system that can merge data from multiple sources to accurately predict crop yield at the village level. In addition, this system should be easily accessible, providing useful and personalized advice to farmers through low-cost and offline methods that do not rely on continuous internet connectivity.
+
+\subsection{Objectives}
+\begin{itemize}
+    \item To Build a Multi-Modal Fusion Model:
+Develop a deep learning framework that combines Swin3D Transformers and Graph Neural Networks (GNNs) to bring together satellite time-series data, IoT sensor readings, and weather forecasts for accurate crop yield prediction.
+
+\item To Test and Measure Accuracy:
+Evaluate the model’s performance to ensure at least 85\% accuracy in predicting crop yield at the village level, showing clear improvement over existing methods.
+
+\item To Enable Edge-Based Deployment:
+Use INT8 ONNX quantisation to compress the trained model to under 35\,MB and achieve on-device inference latency below 500\,ms on mid-range Android hardware, enabling offline operation without a server connection.
+
+\item To Create an Advisory System:
+Build a backend system that provides farmers with personalized recommendations, such as input use and irrigation schedules, along with market information like MSP trends, accessible through SMS or IVR.
+
+\item To Measure Real-World Benefits:
+Assess how the system helps in reducing fertilizer waste and providing early warnings for crop stress or disasters, ideally several days before visible damage appears.
+\end{itemize}
