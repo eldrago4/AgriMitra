@@ -257,7 +257,7 @@ if (-not $SkipMobile) {
     $adbPaths = @(
         "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe",
         "$env:ANDROID_HOME\platform-tools\adb.exe",
-        (Get-Command adb -ErrorAction SilentlyContinue)?.Source
+        $(if ($c = Get-Command adb -ErrorAction SilentlyContinue) { $c.Source })
     ) | Where-Object { $_ -and (Test-Path $_) }
 
     if ($adbPaths) {
