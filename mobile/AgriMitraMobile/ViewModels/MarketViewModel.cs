@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Linq;
 using AgriMitraMobile.Services;
 
 namespace AgriMitraMobile.ViewModels;
@@ -49,17 +50,18 @@ public partial class MarketViewModel : BaseViewModel
             var msp = await _api.GetMspDataAsync();
             MspRows.Clear();
 
-            var rows = msp?.Data ?? DefaultMsp();
-            double maxPrice = rows.Max(r => r.Price);
+            var rows = (msp?.Data ?? DefaultMsp())
+                           .Where(r => r.EffectivePrice > 0).ToList();
+            double maxPrice = rows.Max(r => (double)r.EffectivePrice);
             foreach (var r in rows)
             {
                 MspRows.Add(new MspRow
                 {
                     Crop     = r.Crop,
-                    Variety  = r.Variety,
-                    Price    = $"₹{r.Price:N0}",
-                    Unit     = r.Unit,
-                    BarWidth = r.Price / maxPrice * 220,
+                    Variety  = r.Variety ?? r.Group ?? "",
+                    Price    = $"₹{r.EffectivePrice:N0}",
+                    Unit     = r.Unit ?? "/qtl",
+                    BarWidth = r.EffectivePrice / maxPrice * 220,
                 });
             }
             LastUpdated = msp != null

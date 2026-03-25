@@ -41,17 +41,20 @@ public class MspEntry
     public string? Unit    { get; set; }
 
     private int _price;
-    public int Price
+    public int? Price
     {
-        get => _price;
-        set { if (_price == 0) _price = value; }
+        get => _price == 0 ? null : _price;
+        set { if (_price == 0 && value.HasValue) _price = value.Value; }
     }
     [JsonPropertyName("msp")]
-    public int Msp
+    public int? Msp
     {
-        get => _price;
-        set { if (_price == 0) _price = value; }
+        get => _price == 0 ? null : _price;
+        set { if (_price == 0 && value.HasValue) _price = value.Value; }
     }
+
+    // Effective price for display (whichever is set)
+    [JsonIgnore] public int EffectivePrice => _price;
 
     public MspEntry() { }
     public MspEntry(string crop, string? variety, int price, string? unit)
